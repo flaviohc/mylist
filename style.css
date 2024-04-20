@@ -24,7 +24,7 @@ body{
 .corpo{
     display: flex;
     flex-flow: column;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(25, 182, 255);
     padding: 5px;
     width: 99vw;
     height: 99vh;
@@ -38,7 +38,7 @@ body{
 }
 .item{
     padding: 3px 10px;
-    background-color: rgb(255, 153, 0);
+    background-color: rgba(255, 255, 255, 0.447);
 }
 .done{
     text-decoration: line-through;
