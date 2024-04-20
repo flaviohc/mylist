@@ -1,6 +1,8 @@
 //Variáveis
 let entrada = dqs('#ent');
 let lista = [];
+let titulo = "MyList";
+let hid = document.querySelector("textarea");
 
 //captura o texto digitado
 entrada.addEventListener('keypress', (e)=>{
@@ -50,4 +52,26 @@ function deletarComClick(){
         })
     })
     // mostrar();
+}
+
+dqs("#exp").addEventListener('click',()=>{
+    exportar()
+})
+
+function exportar(){
+    dqs("#textexp").innerHTML=criarTextoExportacao();
+    hid.select();
+    hid.setSelectionRange(0, 99999); // For mobile devices
+    navigator.clipboard.writeText(hid.value);
+}
+
+function criarTextoExportacao(){
+    let text = "";
+    text += "*"+titulo+"* &#10;"
+    lista.forEach((item)=>{
+        if(item[1]==true){
+            text += "&#10;- "+ item[0];
+        }
+    })
+    return text;
 }
