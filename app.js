@@ -130,9 +130,8 @@ function importar(){
         arListTrue = arTodo[1].split('\n');
     }
 
-    // console.log(arTodo.lenght);
     //LISTA PRINCIPAL
-    if(arTodo.lenght==undefined){
+    if(arTodo.length==undefined){
         arListTrue = textoImportado.split('\n');
     }
     arListTrue.forEach((item)=>{
