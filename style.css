@@ -28,6 +28,7 @@ body{
     padding: 5px;
     width: 99vw;
     height: 99vh;
+    max-width: 350px;
 }
 .linha{
     display: flex;

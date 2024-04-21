@@ -4,6 +4,8 @@ let lista = [];
 let titulo = "MyList";
 let hid = document.querySelector("textarea");
 let concluidos = undefined;
+let textoConcluidos = "==================";
+let textoImportado = "";
 
 //captura o texto digitado
 entrada.addEventListener('keypress', (e)=>{
@@ -29,7 +31,7 @@ function limparInput(){
 function mostrar(){
     dqs("#mylist").innerHTML="";
     concluidos = lista.find((element)=> element[1]==false);
-    console.log(concluidos);
+
     lista.forEach((item, index)=>{
         if(item[1]==true){
             dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="hidden"><input type="checkbox" id="cb'+index+'"></span>'+item[0]+'</div>');
@@ -73,17 +75,18 @@ function exportar(){
 function criarTextoExportacao(){
     let text = "";
     let listaExcluidos = false;
-    text += "*"+titulo+"* &#10;"
+    text += "*_"+titulo+"_* &#10;"
     lista.forEach((item)=>{
         if(item[1]==true){
-            text += "&#10;- ✅"+ item[0];
+            text += "&#10;- "+ item[0];
         }
         if(item[1]==false){
             listaExcluidos = true;
         }
     })
+
     if(listaExcluidos==true){
-        text += "&#10;&#10; ______itens concluídos______ &#10;";
+        text += "&#10;&#10;"+ textoConcluidos;
         lista.forEach((item)=>{
             if(item[1]==false){
                 text += "&#10;- ~"+ item[0]+"~";
@@ -91,4 +94,50 @@ function criarTextoExportacao(){
         });
     }
     return text;
+}
+
+dqs("#imp").addEventListener('click',()=>{
+    importar();
+})
+
+//importar lista
+function importar(){
+    //encontrar pontos com duas quebras de linha
+    textoImportado = dqs("#textimp").value;
+    const searchStr = '\n\n';
+    const indexes = [...textoImportado.matchAll(new RegExp(searchStr, 'gi'))].map(a => a.index);
+    //console.log(indexes); // [2, 25, 27, 33]
+    let arTodo=textoImportado.split('\n\n');
+    let arListTrue = arTodo[1].split('\n');
+    // console.log(arList);
+
+    arListTrue.forEach((item)=>{
+        let i = item.match(/\-|\./);
+        let it = item.slice(i["index"]+1);
+        it = it.trimStart().trimEnd();
+        if(it.trim()!=""){
+            lista.push([it,true]);
+        }
+    })
+    // console.log(lista);
+    dqs("#titulo").innerHTML=arTodo[0];
+
+    let arListFalse = arTodo[2].split('\n');
+    arListFalse.shift();
+    arListFalse.forEach((item)=>{
+        let i = item.match(/\-|\./);
+        let it = item.slice(i["index"]+1);
+        it = it.trimStart().trimEnd();
+        if(it.search("~")>-1){
+            it.substring(1);
+            if(it.search("~")>-1){
+                it.slice(0,-1);
+            }
+        }
+        if(it.trim()!=""){
+            lista.push([it,false]);
+        }
+    })
+
+    mostrar();
 }
