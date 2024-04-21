@@ -14,9 +14,9 @@ window.onload = function() {
 //captura o texto digitado
 entrada.addEventListener('keypress', (e)=>{
     if(e.key==="Enter"){
-        entrada.value.trimStart().trimEnd();
+        entrada.value = entrada.value.trimStart().trimEnd();
         // console.log(entrada.value.search('\n'));
-        if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('- ')>-1) || entrada.value.trimStart().search('\n')>-1){
+        if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('- ')>-1) || entrada.value.search('\n')>-1){
             importar();
         }else{
             listar(entrada.value);
@@ -119,6 +119,7 @@ function importar(){
     const indexes = [...textoImportado.matchAll(new RegExp(searchStr, 'gi'))].map(a => a.index);
     //console.log(indexes); // [2, 25, 27, 33]
     let arTodo=textoImportado.split('\n\n');
+    console.log(arTodo);
 
     //TITULO
     if(arTodo.length>1){
@@ -132,7 +133,7 @@ function importar(){
     }
 
     //LISTA PRINCIPAL
-    if(arTodo.length==undefined){
+    if(arTodo.length==1){
         arListTrue = textoImportado.split('\n');
     }
     arListTrue.forEach((item)=>{
