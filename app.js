@@ -14,14 +14,15 @@ window.onload = function() {
 //captura o texto digitado
 entrada.addEventListener('keypress', (e)=>{
     if(e.key==="Enter"){
-        if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('-\s')>-1) || entrada.value.search('\n')>-1){
+        entrada.value.trimStart().trimEnd();
+        // console.log(entrada.value.search('\n'));
+        if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('- ')>-1) || entrada.value.trimStart().search('\n')>-1){
             importar();
         }else{
             listar(entrada.value);
         }
-
-        limparInput();
         mostrar();
+        limparInput();
     }
 })
 
