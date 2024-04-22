@@ -6,17 +6,25 @@ body{
     justify-content: center;
     background-color: rgb(8, 107, 255);
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px;
+    font-size: 25px;
     margin: 0;
-    padding: 0;
+    padding: 0 0;
     gap: 5px;
+}
+header {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    position: fixed;
+    width: 100%;
+    max-width: 350px;
+    top: 0;
 }
 .mylist{
     display: flex;
     flex-flow: column;
-    padding: 10px 5px;
+    padding: 130px 5px;
     margin: 0px;
-    background-color: rgba(231, 206, 255, 0.5);
+    /* background-color: rgba(231, 206, 255, 0.5); */
     gap: 10px;
     width: auto;
     height: 100%;
@@ -25,9 +33,10 @@ body{
     display: flex;
     flex-flow: column;
     background-color: rgb(25, 182, 255);
-    padding: 5px;
+    padding: 0px;
     width: 99vw;
-    height: 99vh;
+    height: 100%;
+    min-height: 100vh;
     max-width: 350px;
 }
 .linha{
@@ -36,10 +45,27 @@ body{
     justify-content: center;
     padding: 3px;
     background-color: aqua;
+    height: 43px;
+    width:98%;
+
 }
 .item{
     padding: 3px 10px;
     background-color: rgba(255, 255, 255, 0.447);
+}
+.inputtask{
+    background-color: aliceblue;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: rgb(87, 87, 87);
+    text-align: center;
+    font: 28px Verdana, Arial, sans-serif;
+
+    padding: 5px;
+    width:250px;
+    height: 30px;
+    overflow:hidden;
+    resize:none;
 }
 .done{
     text-decoration: line-through;
@@ -47,7 +73,25 @@ body{
 .hidden{
     display: none;
 }
-textarea{
-    width:300px;
-    height: 20px;
+/* textarea{
+    /* width: 100%;
+    height: 150px;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    resize: none;
+} */
+button{
+    opacity: 0.5;
+    border: 3px solid black;
+    border-radius: 13px;
+    margin: 3px;
+    width: 40px;
+    background: url(img/plus.svg);
+    background-position: center; /* Center the image */
+    background-size: 40px;
+    background-repeat: no-repeat;
 }

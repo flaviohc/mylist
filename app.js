@@ -14,17 +14,25 @@ window.onload = function() {
 //captura o texto digitado
 entrada.addEventListener('keypress', (e)=>{
     if(e.key==="Enter"){
-        entrada.value = entrada.value.trimStart().trimEnd();
-        // console.log(entrada.value.search('\n'));
-        if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('- ')>-1) || entrada.value.search('\n')>-1){
-            importar();
-        }else{
-            listar(entrada.value);
-        }
-        mostrar();
-        limparInput();
+        adicionar();
     }
 })
+
+dqs("#add").addEventListener('click',()=>{
+    adicionar()
+});
+
+function adicionar(){
+    entrada.value = entrada.value.trimStart().trimEnd();
+    // console.log(entrada.value.search('\n'));
+    if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('- ')>-1) || entrada.value.search('\n')>-1){
+        importar();
+    }else{
+        listar(entrada.value);
+    }
+    mostrar();
+    limparInput();
+}
 
 //insere o texto digitado na matriz Lista
 function listar(item){
@@ -35,6 +43,7 @@ function listar(item){
 function limparInput(){
     entrada.value="";
     entrada.focus();
+    entrada.value="";
 }
 
 //mostra itens da matriz Lista para o usuario
