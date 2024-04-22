@@ -36,7 +36,9 @@ function adicionar(){
 
 //insere o texto digitado na matriz Lista
 function listar(item){
-    lista.push([item,true]);
+    if(item!=""){
+        lista.push([item,true]);
+    }
 }
 
 //limpa o campo input para digitar proximo item
