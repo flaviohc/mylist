@@ -88,7 +88,7 @@ function mostrar(){
         dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>----- itens concluídos -----</div>");
         lista.forEach((item, index)=>{
             if(item[1]==false){
-                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item done" id="'+index+'">'+item[0]+'<span><a href="#" id="del'+index+'">X</a></span></div>');
+                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item done" id="'+index+'">'+item[0]+'<span><button id="del'+index+'" class="del">9</button></span></div>');
             }
         })
     }
@@ -210,17 +210,17 @@ function importar(){
 
 columns = dqsa('.mylist');
 
-document.addEventListener('dragstart', (e)=>{
+document.addEventListener('touchstart', (e)=>{
     e.target.classList.add('dragging');
 })
 
-document.addEventListener("dragend", (e)=>{
+document.addEventListener("touchend", (e)=>{
     e.target.classList.remove('dragging');
     //getArray();
 })
 
 columns.forEach((item)=>{
-    item.addEventListener('dragover', (e)=>{
+    item.addEventListener('touchover', (e)=>{
         const dragging = dqs('.dragging');
         const applyAfter = getNewPosition(item, e.clientY);
 

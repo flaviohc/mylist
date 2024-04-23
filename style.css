@@ -103,6 +103,7 @@ footer{
 }
 .dragging{
     opacity: 50%;
+    touch-action: none;
 }
 textarea:focus {
     outline: none !important;
@@ -146,9 +147,17 @@ span{
     text-decoration: none;
     text-align: right;
     width: 100%;
-    border: 3px solid red;
+    /* border: 3px solid red; */
 }
 #add, #edit, #copy{
     width: 40px;
     font: 25px 'dripicons-v2', Arial, sans-serif;
+}
+.del{
+    scale:0.7;
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+    font: 15px 'dripicons-v2', Arial, sans-serif;
+    background-color: red;
 }
