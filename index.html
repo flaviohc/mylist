@@ -11,17 +11,21 @@
         <header>
             <div id="titulo">MyList</div>
             <div class="linha">
-                <input id="exp" type="button" class="button" value="Copiar para Whatsapp">
-            </div>
-            <div class="linha">
                 <textarea id="ent" class='inputtask'></textarea>
                 <!-- <input type="button" id="add" value="Add"> -->
-                    <input type="button" class="button" id="add" value="+">
+                <input type="button" class="button" id="add" value="+">
+            </div>
         </header>
-        <div id="mylist" class="mylist"></div>
-        <div>
+        <main>
+            <div id="mylist" class="mylist"></div>
             <textarea id="textexp" class="hidden"></textarea>
-        </div>
+        </main>
+        <footer>
+            <div class="linha">
+                <input id="edit" type="button" class="button" value="Editar">
+                <input id="exp" type="button" class="button" value="Copiar">
+            </div>
+        </footer>
     </div>
     <script src="aange.js"></script>
     <script src="app.js"></script>

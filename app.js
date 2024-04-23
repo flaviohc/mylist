@@ -1,5 +1,6 @@
 //Variáveis
 let entrada = dqs('#ent');
+let ent = "";
 let lista = [];
 let titulo = "*_MyList_*";
 let hid = document.querySelector("#textexp");
@@ -12,7 +13,14 @@ window.onload = function() {
 }
 
 //captura o texto digitado
-entrada.addEventListener('keypress', (e)=>{
+entrada.addEventListener('keydown', (e)=>{
+    if(e.key==="Enter"){
+        ent = entrada.value.trimStart().trimEnd();
+        entrada.value = "";
+    }
+})
+
+entrada.addEventListener('keyup', (e)=>{
     if(e.key==="Enter"){
         adicionar();
     }
@@ -23,12 +31,11 @@ dqs("#add").addEventListener('click',()=>{
 });
 
 function adicionar(){
-    entrada.value = entrada.value.trimStart().trimEnd();
     // console.log(entrada.value.search('\n'));
-    if((entrada.value.search('\n\n')>-1) || (entrada.value.search('1-')>-1) || (entrada.value.search('1.')>-1) || (entrada.value.search('- ')>-1) || entrada.value.search('\n')>-1){
+    if((ent.search('\n\n')>-1) || (ent.search('1-')>-1) || (ent.search('1.')>-1) || (ent.search('- ')>-1) || ent.search('\n')>-1){
         importar();
     }else{
-        listar(entrada.value);
+        listar(ent);
     }
     mostrar();
     limparInput();
@@ -61,7 +68,7 @@ function mostrar(){
         }
     })
     if(concluidos != undefined){
-        dqs("#mylist").insertAdjacentHTML('beforeend',"--- itens concluídos ---");
+        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>----- itens concluídos -----</div>");
         lista.forEach((item, index)=>{
             if(item[1]==false){
                 dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item done" id="'+index+'"><span class="hidden"><input type="checkbox" id="cb'+index+'"></span>'+item[0]+'</div>');
