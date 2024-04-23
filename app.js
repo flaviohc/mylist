@@ -8,6 +8,13 @@ let concluidos = undefined;
 let textoConcluidos = "==================";
 let textoImportado = "";
 
+//Previne atualização acidental
+function previneReload(){
+    window.addEventListener('beforeunload', (event) => {
+        event.returnValue = 'Deseja atualizar a pagina? Os dados serão perdidos.';
+    });
+}
+
 window.onload = function() {
     entrada.focus();
 }
@@ -15,8 +22,7 @@ window.onload = function() {
 //captura o texto digitado
 entrada.addEventListener('keydown', (e)=>{
     if(e.key==="Enter"){
-        ent = entrada.value.trimStart().trimEnd();
-        entrada.value = "";
+        preparaInput();
     }
 })
 
@@ -27,8 +33,16 @@ entrada.addEventListener('keyup', (e)=>{
 });
 
 dqs("#add").addEventListener('click',()=>{
-    adicionar()
+    preparaInput();
+    adicionar();
 });
+
+//Prepara o valor digitado antes de adicioná-lo a lista
+//Para evitar bug de quebra de linha depois de adicinar tarefa
+function preparaInput(){
+    ent = entrada.value.trimStart().trimEnd();
+    entrada.value = "";
+}
 
 function adicionar(){
     // console.log(entrada.value.search('\n'));
@@ -37,6 +51,9 @@ function adicionar(){
     }else{
         listar(ent);
     }
+    if(lista!=[]){
+        previneReload();
+    };
     mostrar();
     limparInput();
 }
