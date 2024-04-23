@@ -24,7 +24,7 @@ entrada.addEventListener('keyup', (e)=>{
     if(e.key==="Enter"){
         adicionar();
     }
-})
+});
 
 dqs("#add").addEventListener('click',()=>{
     adicionar()

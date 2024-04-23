@@ -133,8 +133,8 @@ img{
     font: 25px Arial, sans-serif;
     background: url(img/plus.svg);
     overflow: visible;
-    background-position-x: center; /* Center the image */
+    background-position-x: center; /* Center the image hfg   */
     background-size: 40px;
     background-repeat: no-repeat;
-    background-position-y: center;
+    background-position-y: center; 
 }
