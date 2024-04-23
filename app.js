@@ -80,7 +80,7 @@ function mostrar(){
 
     lista.forEach((item, index)=>{
         if(item[1]==true){
-            dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'">'+n+"- "+item[0]+'</div>');
+            dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'" draggable="true">'+n+"- "+item[0]+'</div>');
             n++;
         }
     })
@@ -88,7 +88,7 @@ function mostrar(){
         dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>----- itens concluídos -----</div>");
         lista.forEach((item, index)=>{
             if(item[1]==false){
-                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item done" id="'+index+'"><span class="hidden"><input type="checkbox" id="cb'+index+'"></span>'+item[0]+'</div>');
+                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item done" id="'+index+'">'+item[0]+'<span><a href="#" id="del'+index+'">X</a></span></div>');
             }
         })
     }
@@ -108,7 +108,7 @@ function deletarComClick(){
     // mostrar();
 }
 
-dqs("#exp").addEventListener('click',()=>{
+dqs("#copy").addEventListener('click',()=>{
     exportar()
 })
 
@@ -205,3 +205,47 @@ function importar(){
         })
     }
 }
+
+//Drag and Drop
+
+columns = dqsa('.mylist');
+
+document.addEventListener('dragstart', (e)=>{
+    e.target.classList.add('dragging');
+})
+
+document.addEventListener("dragend", (e)=>{
+    e.target.classList.remove('dragging');
+    //getArray();
+})
+
+columns.forEach((item)=>{
+    item.addEventListener('dragover', (e)=>{
+        const dragging = dqs('.dragging');
+        const applyAfter = getNewPosition(item, e.clientY);
+
+        if(applyAfter){
+            applyAfter.insertAdjacentElement('afterend', dragging);
+        }else{
+            if(dragging){
+                item.prepend(dragging);
+            }
+        }
+        e.preventDefault() ;
+    })
+})
+
+function getNewPosition(column, posY){
+    const cards = column.querySelectorAll(".item:not(.dragging)");
+    let result;
+
+    for(let refer_card of cards){
+        const box = refer_card.getBoundingClientRect();
+        const boxCenterY = box.y + box.height/2;
+
+        if (posY >= boxCenterY)result = refer_card;
+    }
+
+    return result;
+}
+// FIM drag and Drop
