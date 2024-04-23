@@ -84,6 +84,9 @@ function mostrar(){
             n++;
         }
     })
+    if(n-1==0 && lista.length>0){
+        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>(Lista vazia)</div>");
+    }
     if(concluidos != undefined){
         dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>----- itens concluídos -----</div>");
         lista.forEach((item, index)=>{
