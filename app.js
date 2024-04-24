@@ -7,17 +7,29 @@ let hid = document.querySelector("#textexp");
 let concluidos = undefined;
 let textoConcluidos = "==================";
 let textoImportado = "";
+let ordem = false;
+let del = false;
 
 //Previne atualização acidental
-function previneReload(){
-    window.addEventListener('beforeunload', (event) => {
-        event.returnValue = 'Deseja atualizar a pagina? Os dados serão perdidos.';
-    });
-}
+// function previneReload(){
+//     window.addEventListener('beforeunload', (event) => {
+//         event.returnValue = 'Deseja atualizar a pagina? Os dados serão perdidos.';
+//     });
+// }
 
 window.onload = function() {
     entrada.focus();
 }
+
+dqs("#ordem").addEventListener('click',()=>{
+    if(ordem==false){ordem=true}else{ordem=false};
+    mostrar();
+})
+
+dqs("#lixo").addEventListener('click',()=>{
+    if(del==false){del=true}else{del=false};
+    delOn();
+})
 
 //captura o texto digitado
 entrada.addEventListener('keydown', (e)=>{
@@ -46,13 +58,13 @@ function preparaInput(){
 
 function adicionar(){
     // console.log(entrada.value.search('\n'));
-    if((ent.search('\n\n')>-1) || (ent.search('1-')>-1) || (ent.search('1.')>-1) || (ent.search('- ')>-1) || ent.search('\n')>-1){
+    if((ent.search('\n\n')>-1) || (ent.search('[1]\-')>-1) || (ent.search(/[1]\./)>-1) || (ent.search('\-s')>-1) || ent.search('\n')>-1){
         importar();
     }else{
         listar(ent);
     }
     if(lista!=[]){
-        previneReload();
+        // previneReload();
     };
     mostrar();
     limparInput();
@@ -75,15 +87,24 @@ function limparInput(){
 //mostra itens da matriz Lista para o usuario
 function mostrar(){
     let n = 1;
+    let up = false;
+    let last = 0;
+    let first = 0;
     dqs("#mylist").innerHTML="";
     concluidos = lista.find((element)=> element[1]==false);
 
     lista.forEach((item, index)=>{
         if(item[1]==true){
-            dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'" draggable="true">'+n+"- "+item[0]+'</div>');
+            dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="undone">'+n+"- "+item[0]+'</span><span class="ordem"><button class="button up" id="up'+index+'">o</button><button class="button down" id="down'+index+'">h</button></span></div>');
+            if(up == false){
+                first = index;
+                up = true;
+            }
             n++;
+            last=index;
         }
     })
+    
     if(n-1==0 && lista.length>0){
         dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>(Lista vazia)</div>");
     }
@@ -91,19 +112,84 @@ function mostrar(){
         dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>----- itens concluídos -----</div>");
         lista.forEach((item, index)=>{
             if(item[1]==false){
-                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item done" id="'+index+'">'+item[0]+'<span><button class="del">9</button></span></div>');
+                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="done">'+item[0]+'</span><button class="del">9</button></div>');
             }
-        })
+        });
     }
-    dqsa(".del").forEach((e)=>{
-        e.addEventListener('click', (item)=>{
+    deletarComClick();
+    ordemOn(first,last);
+    delOn();
+}
+
+function ordenar(first, last){
+    dqsa(".up").forEach((e)=>{
+        e.addEventListener('click',(item)=>{
             item.stopPropagation();
             let id = item.target.parentNode.parentNode.id;
-            lista.splice(id, 1);
+            let num = 1;
+            if(id-num>=0){
+                while(lista[id-num][1]==false){
+                    num++;
+                }
+                let t = lista[id];
+                lista[id]=lista[id-num];
+                lista[id-num]=t;
+            }
             mostrar();
         })
     })
-    deletarComClick();
+    dqsa(".down").forEach((e)=>{
+        e.addEventListener('click',(item)=>{
+            item.stopPropagation();
+            let id = item.target.parentNode.parentNode.id;
+            id = Number(id);
+
+            if(id+2<=lista.length){
+                let num = 1;
+                while(lista[id+num][1]==false){
+                    num++
+                }
+                let t = lista[id+num];
+                lista[id+num]=lista[id];
+                lista[id]=t;
+            }
+            mostrar();
+        })
+    })
+    dqs("#up"+first).classList.remove("button");
+    dqs("#up"+first).classList.add("disabled");
+    dqs("#down"+last).classList.remove("button");
+    dqs("#down"+last).classList.add("disabled");
+}
+
+function delOn(){
+    dqsa(".del").forEach((e)=>{
+        if(del==true){
+            e.style.display="block";
+            e.addEventListener('click', (item)=>{
+                item.stopPropagation();
+                let id = item.target.parentNode.id;
+                console.log(id);
+                lista.splice(id, 1);
+                mostrar();
+            })
+        }else{
+            e.style.display="none";
+        }
+    })
+}
+
+function ordemOn(first,last){
+    if(ordem==true){
+        dqsa(".ordem").forEach((i)=>{
+            i.style.display="block";
+        })
+        ordenar(first,last);
+    }else{
+        dqsa(".ordem").forEach((i)=>{
+            i.style.display="none";
+        })
+    }
 }
 
 //deleta item ao clicar em cima
@@ -159,13 +245,14 @@ function criarTextoExportacao(){
 //importar lista
 function importar(){
     //encontrar pontos com duas quebras de linha
-    textoImportado = entrada.value;
+    console.log("importado");
+    textoImportado = ent;
     let arListTrue = [];
     const searchStr = '\n\n';
     const indexes = [...textoImportado.matchAll(new RegExp(searchStr, 'gi'))].map(a => a.index);
     //console.log(indexes); // [2, 25, 27, 33]
     let arTodo=textoImportado.split('\n\n');
-    console.log(arTodo);
+    console.log(arTodo.length);
 
     //TITULO
     if(arTodo.length>1){
@@ -179,7 +266,7 @@ function importar(){
     }
 
     //LISTA PRINCIPAL
-    if(arTodo.length==1){
+    if(arTodo.length==1 || arTodo.length==0){
         arListTrue = textoImportado.split('\n');
     }
     arListTrue.forEach((item)=>{

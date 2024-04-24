@@ -129,6 +129,8 @@ textarea:focus {
     resize: none;.
 } */
 .button{
+    width: 40px;
+    height: 40px;
     border: 2px solid rgb(8, 81, 81);;
     border-radius: 13px;
     margin: 3px;
@@ -144,22 +146,36 @@ textarea:focus {
 img{
     width:100px;
 }
-span{
-    text-decoration: none;
-    text-align: right;
+span, .undone{
+    text-align: left;
     width: 100%;
     /* border: 3px solid red; */
 }
-#add, #edit, #copy{
+#add, #edit, #copy, .button{
     width: 40px;
     font: 25px 'dripicons-v2', Arial, sans-serif;
 }
 .del{
     /* scale:0.9; */
     width: 40px;
-    height: 40px;
+    height: 35px;
     border-radius: 20px;
     padding: 0;
     font: 20px 'dripicons-v2', Arial, sans-serif;
     background-color: rgb(255, 72, 72);
+}
+.ordem{
+    display:none;
+    text-align: right;
+    /* border: 3px solid red; */
+    width:150px;
+}
+.disabled{
+    border: 2px solid rgb(8, 81, 81);;
+    border-radius: 13px;
+    margin: 3px;
+    font: 25px 'dripicons-v2', Arial, sans-serif;
+    color: rgb(8, 81, 81);
+    background-color: rgb(11, 42, 42);
+    box-shadow: 1px 1px 1px 1px #0b32078b;
 }
