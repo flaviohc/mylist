@@ -13,18 +13,20 @@
             <div id="titulo">MyList</div>
             <div class="linha">
                 <input type="text" id="ent" class='inputtask'>
+                <textarea id="texttemp" class="hidden" placeholder="Cole a sua lista aqui para importá-la."></textarea>
                 <input type="button" class="button" id="add" value="&#xe035;" title="Adicionar">
             </div>
         </header>
         <main>
             <div id="mylist" class="mylist"></div>
-            <textarea id="textexp" class="hidden"></textarea>
         </main>
         <footer>
             <div class="linha">
-                <input id="ordem" type="button" class="button" value="&#xe01d;" title="Ordenar">
-                <input id="lixo" type="button" class="button" value="&#xe053;" title="Deletar">
-                <input id="copy" type="button" class="button" value="7" title="Copiar">
+                <input id="paste" type="button" class="button" value="<" title="Importar Lista">
+                <input id="numerar" type="button" class="button" value="&#xe010;" title="Numerar Lista">
+                <input id="ordem" type="button" class="button" value="&#xe01d;" title="Reordenar">
+                <input id="lixo" type="button" class="button" value="&#xe053;" title="Deletar ítens">
+                <input id="copy" type="button" class="button" value="7" title="Copiar Lista">
             </div>
         </footer>
     </div>

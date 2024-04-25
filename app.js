@@ -1,14 +1,14 @@
 //Variáveis
 let entrada = dqs('#ent');
-let ent = "";
 let lista = [];
 let titulo = "*_MyList_*";
-let hid = document.querySelector("#textexp");
+let hid = dqs("#texttemp");
 let concluidos = undefined;
 let textoConcluidos = "==================";
-let textoImportado = "";
 let ordem = false;
 let del = false;
+let imp = false;
+let listaNumerada=false;
 
 //Previne atualização acidental
 // function previneReload(){
@@ -21,45 +21,67 @@ window.onload = function() {
     entrada.focus();
 }
 
+dqs("#paste").addEventListener('click',()=>{
+    toggleInputImport();
+})
+
+dqs("#numerar").addEventListener('click',()=>{
+    listaNumerada == false ? listaNumerada=true : listaNumerada=false;
+    mostrar();
+})
+
+function toggleInputImport(){
+    if(imp==false){
+        hid.style.display="block";
+        dqs("#ent").style.display="none";
+        imp=true;
+    }else{
+        hid.style.display="none";
+        dqs("#ent").style.display="block";
+        imp=false;
+    }
+}
+
 dqs("#ordem").addEventListener('click',()=>{
-    if(ordem==false){ordem=true}else{ordem=false};
+    if(ordem==false){
+        ordem=true;
+        del=false
+    }else{
+        ordem=false;
+    }
     mostrar();
 })
 
 dqs("#lixo").addEventListener('click',()=>{
-    if(del==false){del=true}else{del=false};
-    delOn();
+    if(del==false){
+        del=true;
+        ordem=false;
+    }else{
+        del=false;
+    };
+    mostrar();
 })
 
 //captura o texto digitado
-entrada.addEventListener('keydown', (e)=>{
-    if(e.key==="Enter"){
-        preparaInput();
-    }
-})
-
-entrada.addEventListener('keyup', (e)=>{
+entrada.addEventListener('keypress', (e)=>{
     if(e.key==="Enter"){
         adicionar();
     }
-});
+})
 
 dqs("#add").addEventListener('click',()=>{
-    preparaInput();
     adicionar();
+    if(imp=true){
+        toggleInputImport();
+    }
 });
 
-//Prepara o valor digitado antes de adicioná-lo a lista
-//Para evitar bug de quebra de linha depois de adicinar tarefa
-function preparaInput(){
-    ent = entrada.value.trimStart().trimEnd();
-    entrada.value = "";
-}
-
 function adicionar(){
-    // console.log(entrada.value.search('\n'));
-    if((ent.search('\n\n')>-1) || (ent.search('[1]\-')>-1) || (ent.search(/[1]\./)>-1) || (ent.search('\-s')>-1) || ent.search('\n')>-1){
-        importar();
+    let ent = entrada.value.trim();
+    entrada.value = "";
+
+    if(imp==true && hid.value.trim()!=""){
+        importar(hid.value.trim());
     }else{
         listar(ent);
     }
@@ -87,15 +109,21 @@ function limparInput(){
 //mostra itens da matriz Lista para o usuario
 function mostrar(){
     let n = 1;
+    let pre = "";
     let up = false;
     let last = 0;
     let first = 0;
     dqs("#mylist").innerHTML="";
     concluidos = lista.find((element)=> element[1]==false);
 
+    if(titulo != "*_MyList_*"){
+        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>Titulo: "+titulo+"</div>");
+    }
+
     lista.forEach((item, index)=>{
         if(item[1]==true){
-            dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="undone">'+n+"- "+item[0]+'</span><span class="ordem"><button class="button up" id="up'+index+'">o</button><button class="button down" id="down'+index+'">h</button></span></div>');
+            if(listaNumerada == false){pre = ""}else{pre = n};
+            dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="undone">'+pre+"- "+item[0]+'</span><span class="ordem"><button class="button up" id="up'+index+'">o</button><button class="button down" id="down'+index+'">h</button></span><button class="del">9</button></div>');
             if(up == false){
                 first = index;
                 up = true;
@@ -112,7 +140,7 @@ function mostrar(){
         dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>----- itens concluídos -----</div>");
         lista.forEach((item, index)=>{
             if(item[1]==false){
-                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="done">'+item[0]+'</span><button class="del">9</button></div>');
+                dqs("#mylist").insertAdjacentHTML('beforeend','<div class="item" id="'+index+'"><span class="done">-'+item[0]+'</span><button class="del">9</button></div>');
             }
         });
     }
@@ -210,10 +238,13 @@ dqs("#copy").addEventListener('click',()=>{
 })
 
 function exportar(){
-    dqs("#textexp").innerHTML = criarTextoExportacao();
+    hid.innerHTML = criarTextoExportacao();
+    // console.log(criarTextoExportacao());
     hid.select();
     hid.setSelectionRange(0, 99999); // For mobile devices
     navigator.clipboard.writeText(hid.value);
+    console.log(hid.value);
+    // hid.value="";
 }
 
 function criarTextoExportacao(){
@@ -221,10 +252,15 @@ function criarTextoExportacao(){
     let text = "";
     let listaExcluidos = false;
     text += titulo+"&#10;"
+
     lista.forEach((item)=>{
         if(item[1]==true){
-            text += "&#10;"+n+". "+ item[0];
-            n++;
+            if(listaNumerada == true){
+                text += "&#10;"+n+". "+ item[0];
+                n++;
+            }else{
+                text += "&#10;- "+ item[0];
+            }
         }
         if(item[1]==false){
             listaExcluidos = true;
@@ -239,24 +275,30 @@ function criarTextoExportacao(){
             }
         });
     }
+    // console.log(text);
     return text;
 }
 
 //importar lista
-function importar(){
+function importar(text){
     //encontrar pontos com duas quebras de linha
-    console.log("importado");
-    textoImportado = ent;
+    textoImportado = text;
+    hid.innerHTML="";
+
+    if(textoImportado.search('\n\n')>-1 && lista.length!=0){
+        alert("Não foi possível importar sobre uma lista existente");
+        return false;
+    }
+
     let arListTrue = [];
     const searchStr = '\n\n';
     const indexes = [...textoImportado.matchAll(new RegExp(searchStr, 'gi'))].map(a => a.index);
     //console.log(indexes); // [2, 25, 27, 33]
     let arTodo=textoImportado.split('\n\n');
-    console.log(arTodo.length);
 
     //TITULO
     if(arTodo.length>1){
-        dqs("#titulo").innerHTML=arTodo[0];
+        // dqs("#titulo").innerHTML=arTodo[0];
         if(arTodo[0].search('\n')>-1){
             let primeiraQuebraTitulo = arTodo[0].search('\n');
             arTodo[0]="*"+arTodo[0].slice(0,primeiraQuebraTitulo)+"*"+arTodo[0].slice(primeiraQuebraTitulo);
@@ -271,6 +313,11 @@ function importar(){
     }
     arListTrue.forEach((item)=>{
         let it = "";
+        if(item.match(/1\-|1\./)!=undefined){
+            listaNumerada=true;
+        }else{
+            listaNumerada=false;
+        };
         let i = item.match(/\-|\./);
         if(i!=undefined){
             it = item.slice(i["index"]+1);
@@ -290,11 +337,12 @@ function importar(){
         arListFalse.forEach((item)=>{
             let i = item.match(/\-|\./);
             let it = item.slice(i["index"]+1);
+
             it = it.trimStart().trimEnd();
             if(it.search("~")>-1){
-                it.substring(1);
+                it = it.substring(1);
                 if(it.search("~")>-1){
-                    it.slice(0,-1);
+                    it = it.slice(0,-1);
                 }
             }
             if(it.trim()!=""){
