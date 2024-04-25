@@ -11,27 +11,41 @@ let imp = false;
 let listaNumerada=false;
 
 //Previne atualização acidental
-// function previneReload(){
-//     window.addEventListener('beforeunload', (event) => {
-//         event.returnValue = 'Deseja atualizar a pagina? Os dados serão perdidos.';
-//     });
-// }
+function previneReload(){
+    window.addEventListener('beforeunload', (event) => {
+        event.returnValue = 'Deseja atualizar a pagina? Os dados serão perdidos.';
+    });
+}
 
 window.onload = function() {
     entrada.focus();
 }
 
-dqs("#paste").addEventListener('click',()=>{
-    toggleInputImport();
+dqs("#paste").addEventListener('click',(e)=>{
+    e.stopPropagation();
+    toggleInputImport(true);
 })
+
+// dqs(".corpo").addEventListener('click',(e)=>{
+//     toggleInputImport();
+// })
+
+// dqsa(".button").forEach((i)=>{
+//     i.addEventListener('click',()=>{
+//         if(imp==true){
+//             toggleInputImport();
+//         }
+//     })
+// })
 
 dqs("#numerar").addEventListener('click',()=>{
     listaNumerada == false ? listaNumerada=true : listaNumerada=false;
     mostrar();
+    toggleInputImport();
 })
 
-function toggleInputImport(){
-    if(imp==false){
+function toggleInputImport(a=false){
+    if(imp==false && a==true){
         hid.style.display="block";
         dqs("#ent").style.display="none";
         imp=true;
@@ -50,6 +64,7 @@ dqs("#ordem").addEventListener('click',()=>{
         ordem=false;
     }
     mostrar();
+    toggleInputImport();
 })
 
 dqs("#lixo").addEventListener('click',()=>{
@@ -60,6 +75,14 @@ dqs("#lixo").addEventListener('click',()=>{
         del=false;
     };
     mostrar();
+    toggleInputImport();
+})
+
+dqs("#copy").addEventListener('click',()=>{
+    if(lista.length!=0){
+        exportar();
+    }
+    toggleInputImport();
 })
 
 //captura o texto digitado
@@ -71,9 +94,6 @@ entrada.addEventListener('keypress', (e)=>{
 
 dqs("#add").addEventListener('click',()=>{
     adicionar();
-    if(imp=true){
-        toggleInputImport();
-    }
 });
 
 function adicionar(){
@@ -81,12 +101,17 @@ function adicionar(){
     entrada.value = "";
 
     if(imp==true && hid.value.trim()!=""){
+        if(lista.length!=0){
+            if(confirm("Deseja importar como nova lista?")){
+                lista=[];
+            }
+        }
         importar(hid.value.trim());
     }else{
         listar(ent);
     }
     if(lista!=[]){
-        // previneReload();
+        previneReload();
     };
     mostrar();
     limparInput();
@@ -103,7 +128,6 @@ function listar(item){
 function limparInput(){
     entrada.value="";
     entrada.focus();
-    entrada.value="";
 }
 
 //mostra itens da matriz Lista para o usuario
@@ -117,7 +141,7 @@ function mostrar(){
     concluidos = lista.find((element)=> element[1]==false);
 
     if(titulo != "*_MyList_*"){
-        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>Titulo: "+titulo+"</div>");
+        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>"+titulo+"</div>");
     }
 
     lista.forEach((item, index)=>{
@@ -226,25 +250,19 @@ function deletarComClick(){
         element.addEventListener("click", ()=>{
             element.classList.toggle("done");
             lista[element.id][1] = !lista[element.id][1];
-            // console.log(lista[element.id]);
             mostrar();
         })
     })
-    // mostrar();
 }
-
-dqs("#copy").addEventListener('click',()=>{
-    exportar()
-})
 
 function exportar(){
     hid.innerHTML = criarTextoExportacao();
-    // console.log(criarTextoExportacao());
     hid.select();
     hid.setSelectionRange(0, 99999); // For mobile devices
     navigator.clipboard.writeText(hid.value);
-    console.log(hid.value);
-    // hid.value="";
+    hid.value="";
+    limparInput();
+    // alert("Lista copiada para a área de transferência.");
 }
 
 function criarTextoExportacao(){
@@ -281,14 +299,11 @@ function criarTextoExportacao(){
 
 //importar lista
 function importar(text){
-    //encontrar pontos com duas quebras de linha
+
     textoImportado = text;
     hid.innerHTML="";
 
-    if(textoImportado.search('\n\n')>-1 && lista.length!=0){
-        alert("Não foi possível importar sobre uma lista existente");
-        return false;
-    }
+    toggleInputImport();
 
     let arListTrue = [];
     const searchStr = '\n\n';
