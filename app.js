@@ -24,6 +24,7 @@ window.onload = function() {
 
 dqs("#paste").addEventListener('click',(e)=>{
     e.stopPropagation();
+    textimp.value="";
     toggleInputImport(true);
 })
 
@@ -102,8 +103,10 @@ function adicionar(){
     entrada.value = "";
 
     if(imp==true && textimp.value.trim()!=""){
+        if(lista.length!=0){
+            alert("Novos itens foram adicionados à lista.");
+        };
         importar(textimp.value.trim());
-        alert("Novos itens foram adicionados à lista.")
     }else{
         listar(ent);
     }
