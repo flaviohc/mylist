@@ -2,7 +2,8 @@
 let entrada = dqs('#ent');
 let lista = [];
 let titulo = "*_MyList_*";
-let hid = dqs("#texttemp");
+let textimp = dqs("#textimp");
+let texthid = dqs("#texthid");
 let concluidos = undefined;
 let textoConcluidos = "==================";
 let ordem = false;
@@ -46,11 +47,11 @@ dqs("#numerar").addEventListener('click',()=>{
 
 function toggleInputImport(a=false){
     if(imp==false && a==true){
-        hid.style.display="block";
+        textimp.style.display="block";
         dqs("#ent").style.display="none";
         imp=true;
     }else{
-        hid.style.display="none";
+        textimp.style.display="none";
         dqs("#ent").style.display="block";
         imp=false;
     }
@@ -100,13 +101,9 @@ function adicionar(){
     let ent = entrada.value.trim();
     entrada.value = "";
 
-    if(imp==true && hid.value.trim()!=""){
-        if(lista.length!=0){
-            if(confirm("Deseja importar como nova lista?")){
-                lista=[];
-            }
-        }
-        importar(hid.value.trim());
+    if(imp==true && textimp.value.trim()!=""){
+        importar(textimp.value.trim());
+        alert("Novos itens foram adicionados à lista.")
     }else{
         listar(ent);
     }
@@ -256,11 +253,12 @@ function deletarComClick(){
 }
 
 function exportar(){
-    hid.innerHTML = criarTextoExportacao();
-    hid.select();
-    hid.setSelectionRange(0, 99999); // For mobile devices
-    navigator.clipboard.writeText(hid.value);
-    hid.value="";
+    texthid.innerHTML = criarTextoExportacao();
+    texthid.select();
+    texthid.setSelectionRange(0, 99999); // For mobile devices
+    navigator.clipboard.writeText(texthid.value);
+    console.log(texthid.value);
+    texthid.value="";
     limparInput();
     // alert("Lista copiada para a área de transferência.");
 }
@@ -301,7 +299,7 @@ function criarTextoExportacao(){
 function importar(text){
 
     textoImportado = text;
-    hid.innerHTML="";
+    textimp.innerHTML="";
 
     toggleInputImport();
 

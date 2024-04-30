@@ -115,7 +115,7 @@ textarea:focus {
 .done{
     text-decoration: line-through;
 }
-.hidden{
+#texthid, #textimp{
     display: none;
 }
 textarea{
