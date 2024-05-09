@@ -253,9 +253,8 @@ function deletarComClick(){
 function exportar(){
     texthid.innerHTML = criarTextoExportacao();
     texthid.select();
-    texthid.setSelectionRange(0, 99999); // For mobile devices
+    setTimeout(texthid.setSelectionRange(0, 99999), 500); // For mobile devices
     navigator.clipboard.writeText(texthid.value);
-    console.log(texthid.value);
     texthid.value="";
     limparInput();
     // alert("Lista copiada para a área de transferência.");
@@ -289,7 +288,6 @@ function criarTextoExportacao(){
             }
         });
     }
-    alert(text);
     return text;
 }
 
