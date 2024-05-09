@@ -1,7 +1,6 @@
 //Variáveis
 let entrada = dqs('#ent');
 let lista = [];
-let titulo = "*_MyList_*";
 let textimp = dqs("#textimp");
 let texthid = dqs("#texthid");
 let concluidos = undefined;
@@ -10,6 +9,7 @@ let ordem = false;
 let del = false;
 let imp = false;
 let listaNumerada=false;
+let titulo="*_MyList_*";
 
 //Previne atualização acidental
 function previneReload(){
@@ -133,7 +133,7 @@ function mostrar(){
     concluidos = lista.find((element)=> element[1]==false);
 
     if(titulo != "*_MyList_*"){
-        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'>"+titulo+"</div>");
+        dqs("#mylist").insertAdjacentHTML('beforeend',"<div class='concluidos'><pre>"+titulo+"</pre></div>");
     }
 
     lista.forEach((item, index)=>{
@@ -322,7 +322,7 @@ function importar(text){
     if(arTodo.length==1 || arTodo.length==0){
         arListTrue = textoImportado.split('\n');
     }
-    
+
     arListTrue.forEach((item)=>{
         let it = "";
         if(item.match(/1\-|1\./)!=undefined){
