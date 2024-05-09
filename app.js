@@ -128,6 +128,7 @@ function mostrar(){
     let up = false;
     let last = 0;
     let first = 0;
+
     dqs("#mylist").innerHTML="";
     concluidos = lista.find((element)=> element[1]==false);
 
@@ -205,6 +206,7 @@ function ordenar(first, last){
         dqs("#down"+last).classList.remove("button");
         dqs("#down"+last).classList.add("disabled");
     }
+    console.log(lista);
 }
 
 function delOn(){
@@ -308,7 +310,7 @@ function importar(text){
     //TITULO
     if(arTodo.length>1){
         // dqs("#titulo").innerHTML=arTodo[0];
-        if(arTodo[0].search('\n')>-1){
+        if(arTodo[0].search('\n')>-1 && Array.from(arTodo[0])[0].trimStart()!="*"){
             let primeiraQuebraTitulo = arTodo[0].search('\n');
             arTodo[0]="*"+arTodo[0].slice(0,primeiraQuebraTitulo)+"*"+arTodo[0].slice(primeiraQuebraTitulo);
         }
