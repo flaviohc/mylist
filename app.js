@@ -28,18 +28,6 @@ dqs("#paste").addEventListener('click',(e)=>{
     toggleInputImport(true);
 })
 
-// dqs(".corpo").addEventListener('click',(e)=>{
-//     toggleInputImport();
-// })
-
-// dqsa(".button").forEach((i)=>{
-//     i.addEventListener('click',()=>{
-//         if(imp==true){
-//             toggleInputImport();
-//         }
-//     })
-// })
-
 dqs("#numerar").addEventListener('click',()=>{
     listaNumerada == false ? listaNumerada=true : listaNumerada=false;
     mostrar();
@@ -47,26 +35,28 @@ dqs("#numerar").addEventListener('click',()=>{
 })
 
 function toggleInputImport(a=false){
-    if(imp==false && a==true){
-        textimp.style.display="block";
-        dqs("#ent").style.display="none";
-        imp=true;
-    }else{
+    if(imp==true){
         textimp.style.display="none";
         dqs("#ent").style.display="block";
+        dqs("#ent").focus();
         imp=false;
+    }else if(a==true){
+        textimp.style.display="block";
+        textimp.focus();
+        dqs("#ent").style.display="none";
+        imp=true;
     }
 }
 
 dqs("#ordem").addEventListener('click',()=>{
     if(ordem==false){
         ordem=true;
-        del=false
+        del=false;
     }else{
         ordem=false;
     }
-    mostrar();
     toggleInputImport();
+    mostrar();
 })
 
 dqs("#lixo").addEventListener('click',()=>{
@@ -96,6 +86,7 @@ entrada.addEventListener('keypress', (e)=>{
 
 dqs("#add").addEventListener('click',()=>{
     adicionar();
+    toggleInputImport();
 });
 
 function adicionar(){
@@ -208,10 +199,12 @@ function ordenar(first, last){
             mostrar();
         })
     })
-    dqs("#up"+first).classList.remove("button");
-    dqs("#up"+first).classList.add("disabled");
-    dqs("#down"+last).classList.remove("button");
-    dqs("#down"+last).classList.add("disabled");
+    if(lista.length!=0){
+        dqs("#up"+first).classList.remove("button");
+        dqs("#up"+first).classList.add("disabled");
+        dqs("#down"+last).classList.remove("button");
+        dqs("#down"+last).classList.add("disabled");
+    }
 }
 
 function delOn(){
@@ -304,7 +297,7 @@ function importar(text){
     textoImportado = text;
     textimp.innerHTML="";
 
-    toggleInputImport();
+    // toggleInputImport();
 
     let arListTrue = [];
     const searchStr = '\n\n';
