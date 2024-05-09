@@ -322,13 +322,13 @@ function importar(text){
     if(arTodo.length==1 || arTodo.length==0){
         arListTrue = textoImportado.split('\n');
     }
+    
     arListTrue.forEach((item)=>{
         let it = "";
         if(item.match(/1\-|1\./)!=undefined){
             listaNumerada=true;
-        }else{
-            listaNumerada=false;
-        };
+        }
+
         let i = item.match(/\-|\./);
         if(i!=undefined){
             it = item.slice(i["index"]+1);
