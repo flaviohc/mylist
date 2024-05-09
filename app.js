@@ -255,7 +255,6 @@ function exportar(){
     texthid.select();
     texthid.setSelectionRange(0, 99999); // For mobile devices
     navigator.clipboard.writeText(texthid.value);
-    alert('texto copiado:\n' + texthid.value);
     limparInput();
     // alert("Lista copiada para a área de transferência.");
 }
